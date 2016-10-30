@@ -41,7 +41,15 @@ else()
 	add_definitions(-D__STDC_FORMAT_MACROS)
 endif()
 
-add_subdirectory(lib/libbento4)
+if(CORE_SYSTEM_NAME STREQUAL android)
+  add_subdirectory(wvdecrypter)
+  set(DECRYPTERPATH "special://xbmcbinaddons")
+  install(FILES $<TARGET_FILE:ssd_wv> DESTINATION lib/${APP_NAME_LC}/addons/inputstream.mpd)
+else()
+  set(DECRYPTERPATH "special://home/cdm")
+  add_subdirectory(lib/libbento4)
+endif()
+
 list(APPEND DEPLIBS bento4)
 					
 build_addon(inputstream.mpd MPD DEPLIBS)
